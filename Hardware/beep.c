@@ -1,0 +1,32 @@
+#include "stm32f10x.h"                  // Device header
+#include "Delay.h"
+
+void Beep_Init(void)
+{
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+    //PB13  用于人体报警
+	GPIO_InitTypeDef GPIO_InitStructure;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;//推挽输出
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
+	GPIO_ResetBits(GPIOB,GPIO_Pin_13);   //蜂鸣器高电平触发
+}
+
+void Beep_OFF(void)
+{
+    GPIO_ResetBits(GPIOB,GPIO_Pin_13);
+}
+
+void Beep_ON(void)
+{
+    GPIO_SetBits(GPIOB,GPIO_Pin_13);
+}
+
+void Beep_Turn(void)
+{
+    Beep_ON();
+    Delay_ms(500);
+	Beep_OFF();
+	Delay_ms(500);
+}
